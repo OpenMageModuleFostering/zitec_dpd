@@ -813,6 +813,8 @@ class Zitec_Dpd_Postcode_Search_Model_Mysql extends Zitec_Dpd_Postcode_Search_Mo
             } catch (Exception $e) {
                 //for some reasons we have to skip this chunk
                 $insertErrors++;
+                //for now we have to brake the import, even a single entry goes wrong.
+                throw new Exception('Some rows in the csv file are wrong formatted, or the content is invalid. Please use an other CSV file.');
             }
         }
 
