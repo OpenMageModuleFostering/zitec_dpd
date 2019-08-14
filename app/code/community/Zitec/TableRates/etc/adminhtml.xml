@@ -1,0 +1,21 @@
+<config>
+    <acl>
+        <resources>
+            <all>
+                <title>Allow Everything</title>
+            </all>
+            <admin>
+                <children>
+                    <promo>
+                        <children>
+                            <zitec_tablerates translate="title" module="zitec_tablerates">
+                                <title>DPD Table Rates</title>
+                                <sort_order>500</sort_order>
+                            </zitec_tablerates>
+                        </children>
+                    </promo>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+</config>

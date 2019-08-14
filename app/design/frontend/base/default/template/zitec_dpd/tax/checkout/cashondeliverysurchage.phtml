@@ -1,0 +1,38 @@
+<?php /* @var $this Zitec_Dpd_Block_Tax_Checkout_Cashondeliverysurchage */ ?>
+
+<?php if ($this->displayBoth()): ?>
+    <tr>
+        <td style="<?php echo $this->getStyle() ?>" class="a-right" colspan="<?php echo $this->getColspan(); ?>">
+            <?php echo $this->getExcludeTaxLabel() ?>
+        </td>
+        <td style="<?php echo $this->getStyle() ?>" class="a-right">
+            <?php echo $this->helper('checkout')->formatPrice($this->getCashondeliverySurchargeExcludeTax()) ?>
+        </td>
+    </tr>
+    <tr>
+        <td style="<?php echo $this->getStyle() ?>" class="a-right" colspan="<?php echo $this->getColspan(); ?>">
+            <?php echo $this->getIncludeTaxLabel() ?>
+        </td>
+        <td style="<?php echo $this->getStyle() ?>" class="a-right">
+            <?php echo $this->helper('checkout')->formatPrice($this->getCashOnDeliverySurchargeIncludeTax()) ?>
+        </td>
+    </tr>
+<?php elseif ($this->displayIncludeTax()) : ?>
+    <tr>
+        <td style="<?php echo $this->getStyle() ?>" class="a-right" colspan="<?php echo $this->getColspan(); ?>">
+            <?php echo $this->getTotal()->getTitle() ?>
+        </td>
+        <td style="<?php echo $this->getStyle() ?>" class="a-right">
+            <?php echo $this->helper('checkout')->formatPrice($this->getCashondeliverySurchargeIncludeTax()) ?>
+        </td>
+    </tr>
+<?php else: ?>
+    <tr>
+        <td style="<?php echo $this->getStyle() ?>" class="a-right" colspan="<?php echo $this->getColspan(); ?>">
+            <?php echo $this->escapeHtml($this->getTotal()->getTitle()) ?>
+        </td>
+        <td style="<?php echo $this->getStyle() ?>" class="a-right">
+            <?php echo $this->helper('checkout')->formatPrice($this->getCashOnDeliverySurchargeExcludeTax()) ?>
+        </td>
+    </tr>
+<?php endif; ?>

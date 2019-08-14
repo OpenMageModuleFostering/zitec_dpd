@@ -1,0 +1,23 @@
+<?php
+$shippingAddress =  $this->getOrder()->getShippingAddress();
+
+$isValidStreet = Mage::helper('zitec_dpd')->checkAddressStreetLength($shippingAddress);
+
+?>
+<script type="text/javascript">
+    var isStreetLengthValid = '<?php echo (!empty($isValidStreet)) ? '1': '0'; ?>';
+
+    if (isStreetLengthValid != '1') {
+        $$('.head-shipping-address').each(function (el) {
+            el.setStyle({
+                background: 'red'
+            });
+            el.up().up().select('fieldset').each(function(el2){
+                el2.insert({bottom:'<div class="fieldset" style="color: #ff0000;"> <?php echo $this->__(
+                'DPD shipping carrier requirements: The length of address provided by your customer is too long. Please provide a maximum 70 characters length address (street field).'
+                ); ?> </div>'});
+            });
+
+        });
+    }
+</script>

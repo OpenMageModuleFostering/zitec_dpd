@@ -1,0 +1,20 @@
+Agrupación por bultos,Grupiranje vaše pošiljke u pakete
+Communicar este envío con el servicio de mensajería,Komunikacija pošiljke sa dostavnom službom
+Communicar este envío con el servicio de mensajero,Komunikacija pošiljke sa dostavnom službom
+Total bultos,Ukupni broj paketa
+Coste del envío (base imponible):,Troškovi dostave (bez pdv-a):
+Diferencia:,Razlika:
+Distribuya los productos en bultos,Grupiranje proizvoda vaše pošiljke u pakete
+"Este módulo permite distribuir sus productos agrupados en bultos, utilizando la tabla inferior. Si lo desea, <strong>puede dejar bultos vacios, y el sistema no los tendrá en cuenta</strong>.",Ovaj modul omogućava vam organizirati vaše proizvode u pakete koristeći tablicu ispod. Ako želite možete <strong>ostaviti neke pakete praznima i sistem ih neće uzeti u obzir</strong>.
+Introduzca una referencia indicativa para las etiquetas de cada bulto,Unesite opisnu referencu za svaku paketnu oznaku svakog paketa.
+"Este módulo genera etiquetas que debera pegar en cada bulto. Para facilitarle la logística, puede personalizar la etiqueta de cada bulto usando los siguientes campos.","Ovaj modul generira paketnu oznaku za svaki paket. To će vam pomoći da spojite paketnu oznaku sa paketom, možete prilagoditi referencu svake paketne oznake koristeći slijedeća polja."
+Precio del envío al cliente (base imponible):,Troškovi pošiljanja primatelju (bez pdv-a):
+Distribución de bultos,Grupiranje pošiljke u pakete
+bulto ,Paket
+Continuar,Nastaviti
+Cancelar,Odustati
+Enviar,Potvrditi
+Referencia bulto ,Paketna referenca
+Descripción del bulto ,Opis paketa
+Introduzca una descripción de cada bulto,Unesite opis za svaki paket
+Puede introducir una descripción de cada bulto para comunicar al servicio de mensajería usando los siguientes campos.,Možete unijeti opis svakog paketa zbog komunikacije sa dostavnom službom u niža polja.

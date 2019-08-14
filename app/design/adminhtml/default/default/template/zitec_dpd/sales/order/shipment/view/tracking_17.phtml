@@ -1,0 +1,87 @@
+<?
+    /* @var $this Zitec_Dpd_Block_Adminhtml_Sales_Order_Shipment_View_Tracking */
+?>
+<div class="field-row grid" id="shipment_tracking_info">
+<table cellspacing="0" class="data">
+    <col width="100" />
+    <col />
+    <col />
+    <col width="80" />
+    <thead>
+        <tr class="headings">
+            <th><?php echo Mage::helper('sales')->__('Carrier') ?></th>
+            <th><?php echo Mage::helper('sales')->__('Title') ?></th>
+            <th><?php echo Mage::helper('sales')->__('Number') ?></th>
+<?php	if($this->isDPD()): ?>
+
+            <th><?php echo Mage::helper('sales')->__('Label') ?></th>
+<?php   endif; ?>
+            <th class="last"><?php echo Mage::helper('sales')->__('Action') ?></th>
+        </tr>
+    </thead>
+    <tfoot>
+        <tr>
+            <td>
+                <select name="carrier" class="select" style="width:110px" onchange="selectCarrier(this)">
+                    <?php foreach ($this->getCarriers() as $_code=>$_name): ?>
+                    <option value="<?php echo $_code ?>"><?php echo $_name ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </td>
+            <td><input class="input-text" type="text" id="tracking_title" name="title" value="" /></td>
+            <td><input class="input-text" type="text" id="tracking_number" name="number" value="" /></td>
+<?php	if($this->isDPD()): ?>
+            <td></td>
+<?php   endif; ?>
+            <td class="last"><?php echo $this->getSaveButtonHtml() ?></td>
+        </tr>
+    </tfoot>
+<?php if($_tracks = $this->getShipment()->getAllTracks()): ?>
+    <tbody>
+    <?php $i=0;foreach ($_tracks as $_track):$i++ ?>
+        <tr class="<?php echo ($i%2==0)?'even':'odd' ?>">
+            <td><?php echo $this->getCarrierTitle($_track->getCarrierCode()) ?></td>
+            <td><?php echo $this->escapeHtml($_track->getTitle()) ?></td>
+            <td>
+                <?php if ($_track->isCustom()): ?>
+                <?php echo $this->escapeHtml($_track->getNumber()) ?>
+                <?php else: ?>
+                <a href="#" onclick="popWin('<?php echo $this->helper('shipping')->getTrackingPopupUrlBySalesModel($_track) ?>','trackorder','width=800,height=600,resizable=yes,scrollbars=yes')"><?php echo $_track->getNumber() ?></a>
+                <div id="shipment_tracking_info_response_<?php echo $_track->getId() ?>"></div>
+                <?php endif; ?>
+            </td>
+<?php	if($this->isDpdTrack($_track)): ?>
+            <td>          
+                    <a href="<?php echo $this->helper('adminhtml')->getUrl('zitec_dpd/adminhtml_shipment/getlabelpdf', Array('shipmentid' => $this->getShipment()->getId()));  ?>" style="display:block;margin-bottom:0.6em;"><?php echo $this->__('PDF'); ?></a>
+            </td>
+<?php   else:  ?>
+            <td />
+<?php endif; ?>
+            <td class="last"><a href="#" onclick="deleteTrackingNumber('<?php echo $this->getRemoveUrl($_track) ?>', <?php echo $this->isDpdTrack($_track) ? "true" : "false"; ?>); return false;"><?php echo Mage::helper('sales')->__('Delete') ?></a></td>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+<?php endif; ?>
+</table>
+</div>
+<script type="text/javascript">
+//<![CDATA[
+
+var zitecDPDVars = {
+    dpdDeleteConfirmationMessage: "<?php echo $this->__("Taking this action will cancel the shipment with DPD. Are you sure you want to continue?"); ?>",
+    defaultDeleteMessage: "<?php echo Mage::helper('sales')->__('Are you sure?') ?>"
+}
+
+function selectCarrier(elem) {
+    var option = elem.options[elem.selectedIndex];
+    $('tracking_title').value = option.value && option.value != 'custom' ? option.text : '';
+}
+
+function deleteTrackingNumber(url, isDpdTrack) {
+    var confirmationMessage = isDpdTrack ? zitecDPDVars.dpdDeleteConfirmationMessage : zitecDPDVars.defaultDeleteMessage;
+    if (confirm(confirmationMessage)) {
+        submitAndReloadArea($('shipment_tracking_info').parentNode, url)
+    }
+}
+//]]>
+</script>

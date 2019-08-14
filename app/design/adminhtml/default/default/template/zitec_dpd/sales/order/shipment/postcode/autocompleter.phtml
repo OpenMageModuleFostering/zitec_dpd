@@ -1,0 +1,15 @@
+<?php $foundAddresses = $this->getFoundAddresses(); ?>
+
+<?php if (is_array($foundAddresses) && count($foundAddresses)): ?>
+    <ul>
+        <?php foreach($foundAddresses as $address) : ?>
+            <li postcode="<?php echo $address['postcode']; ?>">
+                <div style="float:right; color:red; font-weight:bold;">[<?php echo $address['region']; ?>]</div>
+                <strong><?php echo $address['address']; ?></strong><br/>
+                <span class="informal"><?php echo $address['postcode']; ?></span>
+            </li>
+        <?php endforeach; ?>
+    </ul>
+<?php else : ?>
+    <ul><li><?php echo $this->__('No results available'); ?></li></ul>
+<?php endif; ?>

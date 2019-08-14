@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Zitec_ReportsCommon>
+            <version>1.0.0</version>
+        </Zitec_ReportsCommon>
+    </modules>
+    <global>
+        <blocks>
+            <zitec_reportscommon>
+                <class>Zitec_ReportsCommon_Block</class>
+            </zitec_reportscommon>
+        </blocks>
+        <helpers>
+            <zitec_reportscommon>
+                <class>Zitec_ReportsCommon_Helper</class>
+            </zitec_reportscommon>
+        </helpers>
+    </global>
+</config>
+    

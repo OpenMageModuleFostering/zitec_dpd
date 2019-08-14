@@ -1,0 +1,142 @@
+<?php
+/*
+ * Bloques para la validación de direcciones que se muestran en el diálogo de 
+ * packed shipments.
+*/
+
+/*
+ * @see Zitec_PackedShipment_Block_Addressvalidationdialog
+ */
+?>
+<?php $_errorMsg = ''; ?>
+<?php $_carrier = $this->getOrder()->getShippingCarrier(); ?>
+<?php $_shippingAddress = $this->getOrder()->getShippingAddress(); ?>
+<?php if ($this->helper('zitec_packedshipment')->carrierSupportsAddressValidation($_carrier, $this->getCountryId())): ?>
+    <?php if (!$this->getCity() || !$this->getPostcode() || (!$_carrier->isValidCityPostcode($this->getCity(), $this->getPostcode(), $this->getCountryId(), $_errorMsg) && !$_errorMsg)) : ?>
+	<?php $_postcodeList = ($this->getCity() && $this->getPostcode()) ? $_carrier->getPostcodesForCity($this->getCity(), $_errorMsg) : array(); ?>
+	<?php if ($_postcodeList && !$_errorMsg) : ?>
+	    <!-- Esta pantalla se muestra en el caso de que la población (City) es válida pero el código postal no.  -->
+
+	    <div id="packedshipment_address_validation_postcode">
+		<img style="margin:10px 0;" src="<?php echo $this->getSkinUrl('zitec_packedshipment/images/logoSEUR.jpg') ?>"/>
+		<a href="http://www.interactiv4.com" target="_blank">
+		    <img style="float:right; margin:6px 0;" src="<?php echo $this->getSkinUrl('zitec_packedshipment/images/logo-footer.png') ?>"/>
+		</a>
+		<h4><?php echo $this->__('Código Postal Inválido') ?></h4>
+		<p class="small">
+		    <?php printf($this->__('El código postal %s no coincide con la población %s.'), $this->getPostcode(), $this->getCity()); ?>
+		</p>
+		<p class="small">
+		    <?php echo $this->__('Por favor, consulte con el cliente y seleccione el código postal correcto de la siguiente lista.'); ?>
+		</p>
+		<?php if ($_shippingAddress->getTelephone()): ?>
+		    <p class="small">
+			<?php printf($this->__('Tlf. del cliente: %s.'),$_shippingAddress->getTelephone()); ?>			    
+		    </p>	
+		<?php endif; ?>			
+		<fieldset>
+		    <div>
+			<label class="normal" for="packagedshipment[corrected_postcode]"><?php echo $this->__('Código postal:') ?></label>
+			<select id="packagedshipment[corrected_postcode]" name="packagedshipment[corrected_postcode]" >
+			    <option value=""><?php echo $this->__('Ninguno de los listados'); ?></option>
+			    <?php foreach ($_postcodeList as $_postcode): ?>
+				<option value="<?php echo $_postcode; ?>"><?php echo $_postcode; ?></option>
+			    <?php endforeach; ?>
+			</select>
+		    </div>
+		</fieldset>		    
+	    </div>
+	<?php elseif (!$_errorMsg): ?>
+	    <?php $_cityList = $this->getPostcode()  && $this->getCity() ? $_carrier->getCitiesForPostcode($this->getPostcode(), $_errorMsg) : array(); ?>
+	    <?php if ($_cityList && !$_errorMsg): ?>
+		<!-- Esta pantalla se muestra en el caso de que el código postal es válido pero la población no.  -->
+
+		<div id="packedshipment_address_validation_city">
+		    <img style="margin:10px 0;" src="<?php echo $this->getSkinUrl('zitec_packedshipment/images/logoSEUR.jpg') ?>"/>
+		    <a href="http://www.interactiv4.com" target="_blank">
+			<img style="float:right; margin:6px 0;" src="<?php echo $this->getSkinUrl('zitec_packedshipment/images/logo-footer.png') ?>"/>
+		    </a>
+		    <h4><?php echo $this->__('Población Inválida') ?></h4>
+		    <p class="small">
+			<?php printf($this->__('La población %s no coincide con el código postal %s.'), $this->getCity(), $this->getPostcode() ); ?>
+		    </p>
+		    <p class="small">
+			<?php echo $this->__('Por favor, consulte con el cliente y seleccione la población correcta de la siguiente lista.'); ?>
+		    </p>
+		    <?php if ($_shippingAddress->getTelephone()): ?>
+			<p class="small">
+			    <?php printf($this->__('Tlf. del cliente: %s.'),$_shippingAddress->getTelephone()); ?>			    
+			</p>	
+		    <?php endif; ?>			    
+		    <fieldset>
+			<div>
+			    <label class="normal" for="packagedshipment[corrected_city]"><?php echo $this->__('Población:') ?></label>
+			    <select id="packagedshipment[corrected_city]" name="packagedshipment[corrected_city]" >
+				<option value=""><?php echo $this->__('Ninguna de las listadas'); ?></option>
+				<?php foreach ($_cityList as $_city): ?>
+				    <option value="<?php echo $_city; ?>"><?php echo $_city; ?></option>
+				<?php endforeach; ?>
+			    </select>
+			</div>
+		    </fieldset>		    
+		</div>
+	    <?php elseif (!$_errorMsg)	: ?>
+		<!-- Esta pantalla se muestra en el caso de que la combinación de la población y 
+		    el código postal no coincidan -->
+		<div id="packedshipment_address_validation_both">
+		    <img style="margin:10px 0;" src="<?php echo $this->getSkinUrl('zitec_packedshipment/images/logoSEUR.jpg') ?>"/>
+		    <a href="http://www.interactiv4.com" target="_blank">
+			<img style="float:right; margin:6px 0;" src="<?php echo $this->getSkinUrl('zitec_packedshipment/images/logo-footer.png') ?>"/>
+		    </a>
+		    <h4><?php echo $this->__('Población o Código Postal Inválidos') ?></h4>
+		    <p class="small">
+			<?php printf($this->__('La población %s no coincide con el código postal %s.'), $this->getCity() ? $this->getCity() : $_shippingAddress->getCity(), $this->getPostcode() ? $this->getPostcode() : $_shippingAddress->getPostcode() ); ?>
+		    </p>
+		    <p class="small">
+			<?php echo $this->__('Por favor, contacte con el cliente para verificar sus datos.'); ?>			    
+		    </p>
+		    <?php if ($_shippingAddress->getTelephone()): ?>
+			<p class="small">
+			    <?php printf($this->__('Tlf. del cliente: %s.'),$_shippingAddress->getTelephone()); ?>			    
+			</p>	
+		    <?php endif; ?>
+		    <fieldset>
+			<div>
+			    <label class="normal" for="packagedshipment[corrected_city]"><?php echo $this->__('Población:') ?></label>
+			    <input id="packagedshipment[corrected_city]" name="packagedshipment[corrected_city]" type="text" maxlength="255" value="<?php echo $this->getCity() ? $this->getCity() : $_shippingAddress->getCity(); ?>" />
+			    <label class="normal" for="packagedshipment[corrected_postcode]"><?php echo $this->__('Código postal:') ?></label>
+			    <input id="packagedshipment[corrected_postcode]" name="packagedshipment[corrected_postcode]" type="text" maxlength="5" value="<?php echo $this->getPostcode() ? $this->getPostcode() : $_shippingAddress->getPostcode(); ?>" />				
+			</div>
+                        <div>
+                            <br />
+                            <input id="packagedshipment[dont_correct_address]" name="packagedshipment[dont_correct_address]" type="checkbox" value="dont_correct_address" />
+                            <label class="normal" for="packagedshipment[dont_correct_address]"><?php echo $this->__('Continuar con sin hacer más correcciones') ?></label>    
+                        </div>    
+		    </fieldset>		    
+		</div>			
+	    <?php endif; ?>
+	<?php endif; ?>	
+    <?php endif; ?>
+<?php endif; ?>
+
+<?php if ($_errorMsg): ?>
+    <div id="packedshipment_address_validation_error">
+	<img style="margin:10px 0;" src="<?php echo $this->getSkinUrl('zitec_packedshipment/images/logoSEUR.jpg') ?>"/>
+	<a href="http://www.interactiv4.com" target="_blank">
+	    <img style="float:right; margin:6px 0;" src="<?php echo $this->getSkinUrl('zitec_packedshipment/images/logo-footer.png') ?>"/>
+	</a>
+	<h4><?php echo $this->__('Error de comunicación') ?></h4>
+	<p class="small">
+	    <?php echo 'Ha ocurrido un error comprobando la dirección del cliente.' ?>
+	</p>
+	<p class="small">
+	    <?php echo $this->__('Por favor, vuelva a probar en un momento.'); ?>
+	</p>
+	<p class="small">
+	    <?php echo 'Error: '.$_errorMsg; ?>			    
+	</p>					    
+    </div>
+<?php endif; ?>	
+   
+
+

@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<config>
+    <menu>
+        <zitec_dpd>
+            <title>DPD carrier</title>
+            <sort_order>99999</sort_order>
+            <action>zitec_shippingreports/adminhtml_reports_profitability/index</action>
+            <children>
+                <zitec_dpd translate="title" module="zitec_dpd">
+                    <title>Table Rates</title>
+                    <sort_order>20</sort_order>
+                    <action>zitec_tablerates/adminhtml_index/index/carrier/zitecDpd</action>
+                </zitec_dpd>
+                <zitec_dpd_shipment_settings translate="title" module="zitec_dpd">
+                    <title>Shipping settings</title>
+                    <sort_order>10</sort_order>
+                    <action>adminhtml/system_config/edit/section/carriers</action>
+                </zitec_dpd_shipment_settings>
+                <zitec_dpd_shipment_sender_settings translate="title" module="zitec_dpd">
+                    <title>Sender settings</title>
+                    <sort_order>12</sort_order>
+                    <action>adminhtml/system_config/edit/section/shipping/</action>
+                </zitec_dpd_shipment_sender_settings>
+                <zitec_dpd_payment_settings translate="title" module="zitec_dpd">
+                    <title>Payment settings</title>
+                    <sort_order>14</sort_order>
+                    <action>adminhtml/system_config/edit/section/payment</action>
+                </zitec_dpd_payment_settings>
+                <reports>
+                    <title>Report price vs cost</title>
+                    <sort_order>40</sort_order>
+                    <action>zitec_shippingreports/adminhtml_reports_profitability</action>
+                </reports>
+            </children>
+        </zitec_dpd>
+    </menu>
+
+    <acl>
+        <resources>
+            <all>
+                <title>Allow Everything</title>
+            </all>
+            <admin>
+                <children>
+                    <zitec_dpd>
+                        <title>DPD GeoPost</title>
+                        <sort_order>0</sort_order>
+                        <children>
+                            <zitec_dpd translate="title" module="zitec_dpd">
+                                <title>DPD GeoPost - Table Rates</title>
+                                <sort_order>500</sort_order>
+                            </zitec_dpd>
+                            <zitec_dpd_shipment_settings translate="title" module="zitec_dpd">
+                                <title>DPD GeoPost - Shipping settings</title>
+                                <sort_order>500</sort_order>
+                            </zitec_dpd_shipment_settings>
+                            <zitec_dpd_shipment_sender_settings translate="title" module="zitec_dpd">
+                                <title>Sender settings</title>
+                                <sort_order>500</sort_order>
+                            </zitec_dpd_shipment_sender_settings>
+                            <zitec_dpd_payment_settings translate="title" module="zitec_dpd">
+                                <title>Payment settings</title>
+                                <sort_order>500</sort_order>
+                            </zitec_dpd_payment_settings>
+                            <reports translate="title" module="zitec_dpd">
+                                <title>DPD GeoPost</title>
+                                <sort_order>500</sort_order>
+                            </reports>
+                        </children>
+                    </zitec_dpd>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+</config>

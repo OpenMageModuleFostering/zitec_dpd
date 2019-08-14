@@ -1,0 +1,15 @@
+/* 
+    Document   : zitec_dpd
+    Created on : Jul 25, 2013, 1:12:19 PM
+    Author     : davidslater
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+#sales_shipment_grid_massaction table.massaction td:first-child { 
+    width: 15%
+}
+
+.magento_message{
+    padding: 10px;
+}

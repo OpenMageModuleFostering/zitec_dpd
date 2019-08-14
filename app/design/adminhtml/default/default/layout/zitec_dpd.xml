@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<layout>
+    <adminhtml_sales_order_create_index>
+        <reference name="head">
+            <action method="addJs"><script>zitec/dpd/admin/sales.js</script></action>
+        </reference>
+    </adminhtml_sales_order_create_index>
+
+    <adminhtml_sales_order_shipment_view>
+        <reference name="shipment_tracking" >
+            <action method="setTemplate">
+                <template helper="zitec_dpd/layout/getAdminhtmlTrackingTemplate" />
+            </action>
+        </reference>
+    </adminhtml_sales_order_shipment_view>
+    <adminhtml_sales_shipment_index>
+        <reference name="head">
+            <action method="addItem"><type>skin_css</type><name>zitec_dpd/zitec_dpd.css</name></action>
+        </reference>
+    </adminhtml_sales_shipment_index>
+
+    <shipping_tracking_popup translate="label">
+       <reference name="shipping.tracking.popup">
+            <action method="setTemplate"><template helper="zitec_dpd/layout/changeShippingTrackingPopupTemplate" /></action>
+        </reference>
+    </shipping_tracking_popup>
+
+    <adminhtml_sales_order_view>
+        <reference name="order_totals">
+            <block type="zitec_dpd/order_totals_cashondeliverysurchage" />
+        </reference>
+    </adminhtml_sales_order_view>
+
+    <adminhtml_sales_order_invoice_view>
+        <reference name="invoice_totals">
+            <block type="zitec_dpd/order_invoice_totals_cashondeliverysurcharge" />
+        </reference>
+    </adminhtml_sales_order_invoice_view>
+
+    <adminhtml_sales_order_invoice_new>
+        <reference name="invoice_totals">
+            <block type="zitec_dpd/order_invoice_totals_cashondeliverysurcharge" />
+        </reference>
+    </adminhtml_sales_order_invoice_new>
+
+    <adminhtml_sales_order_invoice_new>
+        <reference name="invoice_totals">
+            <block type="zitec_dpd/order_invoice_totals_cashondeliverysurcharge" />
+        </reference>
+    </adminhtml_sales_order_invoice_new>
+
+    <adminhtml_sales_order_invoice_updateqty>
+        <reference name="invoice_totals">
+            <block type="zitec_dpd/order_totals_cashondeliverysurchage" />
+        </reference>
+    </adminhtml_sales_order_invoice_updateqty>
+
+    <adminhtml_sales_order_creditmemo_view>
+        <reference name="creditmemo_totals">
+            <block type="zitec_dpd/order_creditmemo_totals_cashondeliverysurcharge" />
+        </reference>
+    </adminhtml_sales_order_creditmemo_view>
+
+    <adminhtml_sales_order_creditmemo_new>
+        <reference name="creditmemo_totals">
+            <block type="zitec_dpd/adminhtml_order_totals_cashondeliverysurcharge_newcreditmemo" />
+        </reference>
+    </adminhtml_sales_order_creditmemo_new>
+
+    <adminhtml_sales_order_creditmemo_updateqty>
+        <reference name="creditmemo_totals">
+            <block type="zitec_dpd/adminhtml_order_totals_cashondeliverysurcharge_newcreditmemo" />
+        </reference>
+    </adminhtml_sales_order_creditmemo_updateqty>
+
+    <adminhtml_sales_order_address>
+        <reference name="head">
+            <action method="addJs"><script>zitec_fieldlengths/validator.js</script></action>
+            <action method="addJs"><script>zitec/dpd/admin/PostcodeAutocompleter.js</script></action>
+        </reference>
+        <reference name="before_body_end">
+            <block name="zitec_addresslength"  type="zitec_dpd/adminhtml_sales_order_address_form_addresslength" />
+        </reference>
+    </adminhtml_sales_order_address>
+
+
+    <adminhtml_customer_edit>
+        <reference name="head">
+            <action method="addJs"><script>zitec_fieldlengths/validator.js</script></action>
+        </reference>
+    </adminhtml_customer_edit>
+
+
+</layout>

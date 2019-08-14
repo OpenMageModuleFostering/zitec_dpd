@@ -1,0 +1,25 @@
+<?php
+$shippingAddress =  $this->getOrder()->getShippingAddress();
+$shippingAddressData = $shippingAddress->getData();
+
+$autoPostcode = (!empty($shippingAddressData['auto_postcode'])) ? $shippingAddressData['auto_postcode'] : '';
+
+?>
+<script type="text/javascript">
+    var isPostCodeValid = '<?php echo (!empty($shippingAddressData['valid_auto_postcode'])) ? '1': '0'; ?>';
+    var postCodeUsedByDPD = '<?php echo $autoPostcode; ?>';
+
+    if (isPostCodeValid != '1') {
+        $$('.head-shipping-address').each(function (el) {
+            el.setStyle({
+                background: 'red'
+            });
+            el.up().up().select('fieldset').each(function(el2){
+                el2.insert({bottom:'<div class="fieldset" style="color: #ff0000;"> <?php echo $this->__(
+                'DPD shipping carrier detected an other postcode for current address: %s. You can validate this postcode before scheduling deliveries by clicking the edit button.', $autoPostcode
+                ); ?> </div>'});
+            });
+
+        });
+    }
+</script>

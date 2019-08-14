@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Zitec_Dpd>
+            <active>true</active>
+            <codePool>community</codePool>
+            <depends>Zitec_PackedShipment</depends>
+            <depends>Zitec_TableRates</depends>
+        </Zitec_Dpd>
+    </modules>
+</config>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<layout>
+    <zitec_tablerates_adminhtml_index_index>
+        <reference name="content">
+            <block type="zitec_tablerates/adminhtml_tablerate" name="tablerates">
+                <block name="zitec_dpd_export" as="zitec_dpd_export" type="zitec_dpd/adminhtml_system_config_button_export" />
+            </block>
+        </reference>
+    </zitec_tablerates_adminhtml_index_index>
+    <zitec_tablerates_adminhtml_index_grid>
+        <block type="core/text_list" name="root" output="toHtml">
+        </block>
+  
+    </zitec_tablerates_adminhtml_index_grid>
+    <zitec_tablerates_adminhtml_index_new>
+        <update handle="zitec_tablerates_adminhtml_index_edit"/>
+    </zitec_tablerates_adminhtml_index_new>
+    <zitec_tablerates_adminhtml_index_edit>
+        <update handle="editor"/>
+        <reference name="content">
+            <block type="zitec_tablerates/adminhtml_tablerate_edit" name="tablerate_edit"></block>
+        </reference>
+    </zitec_tablerates_adminhtml_index_edit>
+    
+    <zitec_tablerates_adminhtml_index_import>
+        <update handle="editor"/>
+        <reference name="content">
+            <block type="zitec_tablerates/adminhtml_tablerate_import" name="tablerate_edit"></block>
+        </reference>
+    </zitec_tablerates_adminhtml_index_import>
+    
+    <zitec_tablerates_adminhtml_index_export>
+        <update handle="editor"/>
+        <reference name="content">
+            <block type="zitec_tablerates/adminhtml_tablerate_export" name="tablerate_edit"></block>
+        </reference>
+    </zitec_tablerates_adminhtml_index_export>
+</layout>

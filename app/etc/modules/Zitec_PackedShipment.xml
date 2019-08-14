@@ -1,0 +1,11 @@
+<config>
+	<modules>
+		<Zitec_PackedShipment>
+			<active>true</active>
+			<codePool>community</codePool>
+			<depends>
+				<Mage_Shipping/>
+			</depends>
+		</Zitec_PackedShipment>
+	</modules>
+</config>

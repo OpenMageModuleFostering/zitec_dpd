@@ -1,0 +1,38 @@
+<div id="postcode_autocomplete" class="autocomplete"></div>
+<script type="text/javascript">
+    $('postcode').insert ({'before': '<a id="refresh-postcode" href="#refresh-postcode"><?php echo $this->__('DPD - search postcode') ?></a> <span id="postcode_indicator" class="autocomplete-indicator" style="display: none">' +
+    '<img src="<?php echo $this->getSkinUrl('images/ajax-loader.gif') ?>" alt="<?php echo $this->__('Loading...') ?>" class="v-middle"/>' +
+    '</span>'
+    });
+    var postcodeAutocompleter = new PostcodeAutocompleter(
+        'postcode',
+        'postcode_autocomplete',
+        '<?php echo $this->getUrl('zitec_dpd/adminhtml_shipment/validatePostcode') ?>',
+        {
+            paramName:"query",
+            minChars:2,
+            indicator:"postcode_indicator",
+            updateElement:getSelectionPostcodeValidateId,
+            evalJSON:'force'
+        }
+    );
+
+    $('refresh-postcode').observe('click', function(event) {
+        console.log(postcodeAutocompleter);
+        postcodeAutocompleter.activate();
+    });
+    function getSelectionPostcodeValidateId(li) {
+        $('postcode').setValue(li.getAttribute('postcode'));
+    }
+
+</script>
+<style type="text/css">
+    #postcode_autocomplete ul{
+        max-height: 250px;
+        overflow-y: scroll;
+    }
+    #refresh-postcode{
+        clear: both;
+        display: block;
+    }
+</style>

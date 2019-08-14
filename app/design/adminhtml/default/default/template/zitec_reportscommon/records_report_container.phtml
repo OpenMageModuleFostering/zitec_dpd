@@ -1,0 +1,27 @@
+<?php
+
+
+?>
+
+<div class="content-header">
+    <table cellspacing="0">
+        <tr>
+            <td style="<?php echo $this->getHeaderWidth() ?>"><?php echo $this->getHeaderHtml() ?></td>
+            <td class="form-buttons"><?php echo $this->getButtonsHtml() ?></td>
+        </tr>
+    </table>
+</div>
+<div>
+    <?php echo $this->getChildHtml('store.switcher') ?>
+</div>
+<div>
+    <?php echo $this->getChildHtml('grid.filter.form') ?>
+</div>
+<div>
+    <?php echo $this->getGridHtml() ?>
+</div>
+<script type="text/javascript">
+    function filterFormSubmit() {
+        switchStore($('store_switcher'));
+    }
+</script>

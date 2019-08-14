@@ -1,0 +1,8 @@
+<config>
+    <modules>
+        <Zitec_ReportsCommon>
+            <active>true</active>
+            <codePool>community</codePool>
+        </Zitec_ReportsCommon>
+    </modules>
+</config>

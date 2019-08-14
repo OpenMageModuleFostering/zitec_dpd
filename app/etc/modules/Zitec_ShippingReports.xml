@@ -1,0 +1,11 @@
+<config>
+    <modules>
+        <Zitec_ShippingReports>
+            <active>true</active>
+            <codePool>community</codePool>
+            <depends>
+                <Zitec_ReportsCommon/>
+            </depends>
+        </Zitec_ShippingReports>
+    </modules>
+</config>

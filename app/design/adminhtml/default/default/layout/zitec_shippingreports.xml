@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <zitec_shippingreports_adminhtml_reports_profitability_index>
+        <reference name="content">
+            <block type="zitec_shippingreports/adminhtml_profitability" name="zitec_shippingreports_profitability" />
+        </reference>
+    </zitec_shippingreports_adminhtml_reports_profitability_index>
+</layout>

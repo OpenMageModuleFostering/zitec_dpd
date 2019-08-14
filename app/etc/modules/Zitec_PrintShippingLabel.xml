@@ -1,0 +1,9 @@
+
+<config>
+    <modules>
+        <Zitec_PrintShippingLabel>
+            <active>true</active>
+            <codePool>community</codePool>
+        </Zitec_PrintShippingLabel>
+    </modules>
+</config>

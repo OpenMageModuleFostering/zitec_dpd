@@ -1,0 +1,380 @@
+<config>
+    <sections>
+        <carriers>
+            <groups>
+                <zitecDpd>
+                    <label>DPD GeoPost By Zitec</label>
+                    <comment><![CDATA[
+					<div class="custom-options">
+						<div style="margin-bottom:20px;">
+									<strong style="color:#EA7601;">DPD GeoPost v1.0
+									<br />
+						</div>
+					</div>
+					]]>
+                    </comment>
+
+                    <frontend_type>text</frontend_type>
+                    <sort_order>20</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <active translate="label">
+                            <label>Enabled</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </active>
+                        <wscountry translate="label">
+                            <label>DPD Country Select</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>zitec_dpd/config_source_wscountry</source_model>
+                            <sort_order>15</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </wscountry>
+                        <mode translate="label">
+                            <label>Production Mode</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <backend_model>zitec_dpd/config_data_mode</backend_model>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </mode>
+                        <wsurlproduction translate="label comment">
+                            <label>Production WS URL</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>33</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <depends>
+                                <wscountry>zOther</wscountry>
+                            </depends>
+                            <comment><![CDATA[E.g. http://egproduction.dpd.com/IT4EMWebServices/eshop/]]></comment>
+                        </wsurlproduction>
+                        <wsurltest translate="label comment">
+                            <label>Test WS URL</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>34</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <depends>
+                                <wscountry>zOther</wscountry>
+                            </depends>
+                            <comment><![CDATA[E.g. http://egtest.dpd.com/IT4EMWebServices/eshop/]]></comment>
+                        </wsurltest>
+                        <title translate="label">
+                            <label>Method Title</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>38</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </title>
+                        <name translate="label">
+                            <label>Method Name</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </name>
+                        <username translate="label">
+                            <label>Web Service Username</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </username>
+                        <password translate="label">
+                            <label>Web Service Password</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>60</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </password>
+                        <connectionTimeout translate="label comment">
+                            <label>Web Service Connection Timeout</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>65</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment>
+                                <![CDATA[Set a timeout for connecting to the DPD web service in seconds.]]></comment>
+                        </connectionTimeout>
+                        <senderAddressId translate="label">
+                            <label>Sender Address Id</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>70</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </senderAddressId>
+                        <payerId translate="label">
+                            <label>Payer Id</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>80</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </payerId>
+                        <services translate="label comment">
+                            <label>Service</label>
+                            <frontend_type>multiselect</frontend_type>
+                            <source_model>zitec_dpd/config_source_service</source_model>
+                            <sort_order>90</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment>Select the services that you want to enable. Note that you must also define the shipping prices for these services in your shipping table rates (see below).</comment>
+                        </services>
+                        <export translate="label">
+                            <label>Export Shipping Table Rates</label>
+                            <frontend_type>button</frontend_type>
+                            <frontend_model>zitec_dpd/adminhtml_system_config_button_export</frontend_model>
+                            <sort_order>100</sort_order>
+                            <show_in_default>0</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </export>
+                        <import translate="label">
+                            <label>Import Shipping Table Rates</label>
+                            <frontend_type>import</frontend_type>
+                            <backend_model>zitec_dpd/config_data_tablerate</backend_model>
+                            <sort_order>110</sort_order>
+                            <show_in_default>0</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </import>
+                        <postcode_autocomplete_checkout translate="label">
+                            <label>Auto-correct the user postcode in checkout</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment>Use this option to allow DPD shipment method even if the postcode is not valid. The post code will be automatically generated considering the city, region and street. In some cases the administrator will have to manually validate the postcode.</comment>
+                        </postcode_autocomplete_checkout>
+
+                    </fields>
+                </zitecDpd>
+
+
+            </groups>
+        </carriers>
+        <shipping>
+            <groups>
+                <zitec_pickupaddress traslate="label">
+                    <label>DPD GeoPost Pickup Address</label>
+                    <sort_order>10</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <fields>
+                        <name translate="label">
+                            <label>Name</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </name>
+                        <additionalname translate="label">
+                            <label>Additional Name</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>15</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </additionalname>
+                        <street translate="label">
+                            <label>Street</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </street>
+                        <city translate="label">
+                            <label>City</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </city>
+                        <postcode translate="label">
+                            <label>Postcode</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </postcode>
+                        <country translate="label">
+                            <label>Country</label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>50</sort_order>
+                            <source_model>adminhtml/system_config_source_country</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </country>
+                        <phone translate="label">
+                            <label>Telephone</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>55</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </phone>
+                        <email translate="label">
+                            <label>Email Address</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>60</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </email>
+                    </fields>
+                </zitec_pickupaddress>
+            </groups>
+        </shipping>
+        <payment>
+            <groups>
+                <zitec_dpd_cashondelivery translate="label" module="payment">
+                    <label>Cash On Delivery for DPD GeoPost</label>
+                    <comment><![CDATA[<div class="custom-options">
+                        <div style="margin-bottom:20px;">
+                                    <span style="color:#EA7601;">Important:</span> This payment method will only be available if you have activated the shipping method 'DPD GeoPost' and have specified values in the 'CashOnDelivery Surcharge' column of your table rates file.
+                                    <br />
+                                    <strong style="color:#EA7601;">Cash on Delivery for DPD GeoPost v1.0</strong>
+                                    <br />
+                        </div>
+                    </div>
+                    ]]></comment>
+                    <sort_order>670</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <active translate="label">
+                            <label>Enabled</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </active>
+                        <title translate="label">
+                            <label>Title</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </title>
+                        <description translate="label">
+                            <label>Description</label>
+                            <frontend_type>textarea</frontend_type>
+                            <sort_order>3</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </description>
+                        <total_title translate="label">
+                            <label>Surcharge Name</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>4</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </total_title>
+                        <order_status translate="label">
+                            <label>New order status</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>zitec_dpd/config_source_order_status_pendingpayment</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </order_status>
+                        <specificproducto translate="label">
+                            <label>Service</label>
+                            <frontend_type>multiselect</frontend_type>
+                            <source_model>zitec_dpd/payment_cashondelivery_source_service</source_model>
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <can_be_empty>1</can_be_empty>
+                        </specificproducto>
+                        <cod_payment_type translate="label comment">
+                            <label>Payment Type</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>zitec_dpd/payment_cashondelivery_source_codpaymenttype</source_model>
+                            <sort_order>55</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment>Select how customers will pay the courier.</comment>
+                        </cod_payment_type>
+                        <payment_amount_type translate="label comment">
+                            <label>Payment amount type</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>zitec_dpd/payment_cashondelivery_source_amountType</source_model>
+                            <sort_order>57</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment>Choose the type of charge percentage of order amount or fixed price in case table rates is not defined for DPD shipping method.</comment>
+                        </payment_amount_type>
+                        <payment_amount translate="label comment">
+                            <label>Payment amount</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>58</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>This amount will be used to charge the customer if no records is loaded into table rates</comment>
+                        </payment_amount>
+
+                        <allowspecific translate="label">
+                            <label>Payment from Applicable Countries</label>
+                            <frontend_type>allowspecific</frontend_type>
+                            <sort_order>60</sort_order>
+                            <source_model>adminhtml/system_config_source_payment_allspecificcountries</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </allowspecific>
+                        <specificcountry translate="label">
+                            <label>Payment from Specific Countries</label>
+                            <frontend_type>multiselect</frontend_type>
+                            <sort_order>61</sort_order>
+                            <source_model>zitec_dpd/payment_cashondelivery_source_country</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <can_be_empty>1</can_be_empty>
+                        </specificcountry>
+                    </fields>
+                </zitec_dpd_cashondelivery>
+            </groups>
+        </payment>
+    </sections>
+</config>

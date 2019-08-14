@@ -1,0 +1,18 @@
+<?php
+    /* Se hacen accesible desde la página de 'new shipment' unas informaciones
+     * necesarias para la validación de la dirección.
+     */
+?>
+
+<script type="text/javascript">
+//<![CDATA[    
+    var zitecIsAddressValidationAvailable = <?php echo $this->isAddressValidationAvailable() ? 'true' : 'false'; ?>;
+    var zitecShippingAddressCity = "<?php echo $this->getShippingAddressCity(); ?>";
+    var zitecShippingAddressPostcode = "<?php echo $this->getShippingAddressPostcode(); ?>";
+    var zitecShippingAddressCountryId = "<?php echo $this->getShippingAddressCountryId(); ?>";
+    var zitecOrderId = "<?php echo $this->getOrderId(); ?>";
+    var zitecValidateAddressUrl = "<?php echo $this->getAddressValidationDialogHtmlActionUrl(); ?>";
+    var zitecAddressValidationBeforeContinueHandler = "zitecAddressValidationBeforeContinue";
+    var zitecDontCorrectAddress = false;
+//]]>    
+</script>

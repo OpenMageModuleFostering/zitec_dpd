@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<config>
+    <menu>
+        <report>
+            <children>
+
+                <zitec_reportscommon>
+                    <children>
+                        <zitec_shippingreports translate="title" module="zitec_shippingreports">
+                            <title>Shipping Price vs Cost</title>
+                            <action>zitec_shippingreports/adminhtml_reports_profitability</action>
+                        </zitec_shippingreports>
+                    </children>
+                </zitec_reportscommon>
+            </children>
+        </report>
+    </menu>
+    <acl>
+        <resources>
+            <all>
+                <title>Allow Everything</title>
+            </all>
+            <admin>
+                <children>
+                    <report>
+                        <children>
+                            <zitec_reportscommon translate="title">
+                                <title>DPD reports</title>
+                                <sort_order>9999</sort_order>
+                                <children>
+                                    <zitec_shippingreports translate="title" module="zitec_shippingreports">
+                                        <title>Shipping Price vs Cost</title>
+                                        <action>zitec_shippingreports/adminhtml_reports_profitability</action>
+                                    </zitec_shippingreports>
+                                </children>
+                            </zitec_reportscommon>
+                        </children>
+                    </report>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+</config>

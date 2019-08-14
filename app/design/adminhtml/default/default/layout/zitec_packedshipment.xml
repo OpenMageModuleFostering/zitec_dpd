@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<layout>
+    <adminhtml_sales_order_shipment_new>
+        <reference name="head">
+            <action method="addJs">
+                <script>zitec_packedshipment/packedshipment.js</script>
+            </action>
+            <action method="addCss">
+                <name>zitec_packedshipment/windows/themes/default.css</name>
+            </action>
+            <action method="addCss">
+                <name>zitec_packedshipment/windows/themes/magento.css</name>
+            </action>
+<!--			<action method="addCss"><name>zitec_packedshipment/windows/themes/spread.css</name></action>-->
+<!--			<action method="addCss"><name>zitec_packedshipment/windows/themes/alert.css</name></action>-->
+<!--			<action method="addCss"><name>zitec_packedshipment/windows/themes/alert_lite.css</name></action>-->
+<!--			<action method="addCss"><name>zitec_packedshipment/windows/themes/alphacube.css</name></action>-->
+<!--			<action method="addCss"><name>zitec_packedshipment/windows/themes/debug.css</name></action>-->
+		
+        </reference>
+        <reference name="order_items">
+            <action method="setTemplate">
+                <template helper="zitec_packedshipment/data/changeOrderItemsTemplate" />
+            </action>
+        </reference>
+        <reference name="js">
+            <block name="address_validation_info_js" type="zitec_packedshipment/addressvalidationinfojs">
+                <action method="setTemplate">
+                    <template helper="zitec_packedshipment/data/changeAddressValidationJsTemplate" />
+                </action> 
+            </block>
+        </reference>
+    </adminhtml_sales_order_shipment_new> 
+</layout>
