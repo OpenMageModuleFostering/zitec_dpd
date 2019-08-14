@@ -60,7 +60,11 @@ class Zitec_Dpd_Adminhtml_PostcodeController extends Mage_Adminhtml_Controller_A
      */
     public function importAction()
     {
+        set_time_limit(0);
+
         $baseFileName = '';
+        $newUpdateFilename = '';
+
         try {
 
             //process the upload logic for the csv file
@@ -74,11 +78,11 @@ class Zitec_Dpd_Adminhtml_PostcodeController extends Mage_Adminhtml_Controller_A
                 $uploader->setAllowRenameFiles(true);
                 $uploader->setFilesDispersion(false);
                 $path = Mage::helper('zitec_dpd/postcode_search')->getPathToDatabaseUpgradeFiles();
-                //$path .= date('Y-m-d').DS;
+
                 if (!is_dir($path)) {
                     mkdir($path, 0777, true);
                 }
-                $uploader->save($path, $_FILES['csv']['contacts']);
+                $uploader->save($path, $_FILES['csv']['name']);
                 $newUpdateFilename = $path . $uploader->getUploadedFileName();
                 $baseFileName      = $uploader->getUploadedFileName();
             }
@@ -109,8 +113,6 @@ class Zitec_Dpd_Adminhtml_PostcodeController extends Mage_Adminhtml_Controller_A
                     Mage::helper('core')->__('File %s was not found in path media/dpd/postcode_updates', $baseFileName)
                 );
             }
-
-
         } catch (Exception $e) {
             Mage::getSingleton('core/session')->addError($e->getMessage());
             $this->_redirect("zitec_dpd/adminhtml_postcode/updateForm");

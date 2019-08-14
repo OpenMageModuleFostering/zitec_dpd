@@ -34,6 +34,9 @@ class Zitec_Dpd_Block_Adminhtml_Postcode_Update_Files extends Mage_Adminhtml_Blo
     public function getAvailableCsvFiles()
     {
         $path = Mage::helper('zitec_dpd/postcode_search')->getPathToDatabaseUpgradeFiles();
+        if (!is_dir($path)) {
+            mkdir($path, 0777, true);
+        }
         $files = array();
         if ($handle = opendir($path)) {
             while (false !== ($entry = readdir($handle))) {

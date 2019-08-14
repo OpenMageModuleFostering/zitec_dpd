@@ -126,6 +126,17 @@ class Zitec_Dpd_Postcode_Search extends Zitec_Dpd_Postcode_Search_Abstract imple
     }
 
     /**
+     * return the database to the last known stable state
+     * @param $file
+     *
+     * @return mixed
+     */
+    public function rollbackDatabase(){
+        return $this->_searchModel->rollbackDatabase();
+    }
+
+
+    /**
      * @param array $address
      *      $address contain next keys
      *      MANDATORY
