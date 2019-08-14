@@ -16,7 +16,6 @@ class Zitec_Dpd_Api_Shipment_Save extends Zitec_Dpd_Api_Shipment
 {
 
 
-
     /**
      *
      * @return string
@@ -25,7 +24,6 @@ class Zitec_Dpd_Api_Shipment_Save extends Zitec_Dpd_Api_Shipment
     {
         return Zitec_Dpd_Api_Configs::METHOD_CREATE_SHIPMENT;
     }
-
 
 
     protected function _init()
@@ -63,6 +61,7 @@ class Zitec_Dpd_Api_Shipment_Save extends Zitec_Dpd_Api_Shipment
         return $this->_getData(array(Zitec_Dpd_Api_Configs::SHIPMENT_LIST, $tag));
     }
 
+
     /**
      *
      * @param Mage_Sales_Model_Order_Address $shippingAddress
@@ -83,6 +82,7 @@ class Zitec_Dpd_Api_Shipment_Save extends Zitec_Dpd_Api_Shipment
 
         return $this;
     }
+
 
     /**
      *
@@ -167,7 +167,12 @@ class Zitec_Dpd_Api_Shipment_Save extends Zitec_Dpd_Api_Shipment
             Zitec_Dpd_Api_Configs::PARCELS_WEIGHT                  => $weight,
             Zitec_Dpd_Api_Configs::PARCELS_DESCRIPTION             => $description
         );
-        $this->_setData(array(Zitec_Dpd_Api_Configs::SHIPMENT_LIST, Zitec_Dpd_Api_Configs::PARCELS), $parcel);
+        $parcels = $this->_getData(array(Zitec_Dpd_Api_Configs::SHIPMENT_LIST, Zitec_Dpd_Api_Configs::PARCELS));
+        if(empty($parcels)) {
+            $this->_setData(array(Zitec_Dpd_Api_Configs::SHIPMENT_LIST, Zitec_Dpd_Api_Configs::PARCELS), array($parcel));
+        } else {
+            $this->_setData(array(Zitec_Dpd_Api_Configs::SHIPMENT_LIST, Zitec_Dpd_Api_Configs::PARCELS), $parcel);
+        }
 
         return $this;
     }

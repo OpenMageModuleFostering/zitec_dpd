@@ -102,15 +102,31 @@ class Zitec_Dpd_Api_Manifest_Close extends Zitec_Dpd_Api_Manifest
      */
     public function addShipment($dpdShipmentId, $dpdShipmentReferenceNumber)
     {
-        return $this->_setData(
-            array(
-                self::MANIFEST,
-                self::SHIPMENT_REFERENCE_LIST),
-            array(
-                self::SHIPMENT_REFERENCE_ID     => $dpdShipmentId,
-                self::SHIPMENT_REFERENCE_NUMBER => $dpdShipmentReferenceNumber
-            )
-        );
+        $shipments =  $this->_getData(array(self::MANIFEST,self::SHIPMENT_REFERENCE_LIST));
+        if(empty($shipments)){
+            return $this->_setData(
+                array(
+                    self::MANIFEST,
+                    self::SHIPMENT_REFERENCE_LIST),
+                array(
+                    array(
+                        self::SHIPMENT_REFERENCE_ID     => $dpdShipmentId,
+                        self::SHIPMENT_REFERENCE_NUMBER => $dpdShipmentReferenceNumber
+                    )
+                )
+            );
+        } else {
+            return $this->_setData(
+                array(
+                    self::MANIFEST,
+                    self::SHIPMENT_REFERENCE_LIST),
+                array(
+                    self::SHIPMENT_REFERENCE_ID     => $dpdShipmentId,
+                    self::SHIPMENT_REFERENCE_NUMBER => $dpdShipmentReferenceNumber
+                )
+            );
+        }
+
     }
 
     /**

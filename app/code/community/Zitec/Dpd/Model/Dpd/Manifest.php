@@ -53,7 +53,7 @@ class Zitec_Dpd_Model_Dpd_Manifest extends Mage_Core_Model_Abstract
         }
 
         if (!$shipmentIds || !is_array($shipmentIds)) {
-            $message = $this->_getHelper()->__("Please the shipments to include in the closed manifest.");
+            $message = $this->_getHelper()->__("Please select the shipments to include in the closed manifest.");
             $this->_addNotification($message);
 
             return false;
