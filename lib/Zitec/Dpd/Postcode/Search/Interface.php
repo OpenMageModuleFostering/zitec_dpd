@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zitec_Dpd – shipping carrier extension - postcode validation
  *
@@ -14,7 +15,6 @@
  * @copyright  Copyright (c) 2014 Zitec COM
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 interface Zitec_Dpd_Postcode_Search_Interface
 {
 

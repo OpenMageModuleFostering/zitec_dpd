@@ -1,0 +1,25 @@
+<?php $files = $this->getAvailableCsvFiles(); ?>
+
+<h2><?php echo $this->__("Available import files"); ?></h2>
+<div class="fieldset grid" style="height: 220px; overflow: scroll;">
+    <?php if (count($files)): ?>
+        <table class="data" >
+            <thead>
+                <tr class="headings">
+                    <th><?php echo $this->__("File"); ?></th>
+                    <th><?php echo $this->__("Uploaded time"); ?></th>
+                </tr>
+            </thead>
+            <tbody>
+            <?php foreach($files as $file => $modified): ?>
+                <tr>
+                    <td><?php echo $file; ?></td>
+                    <td><?php echo date('d-m-Y H:i',$modified); ?></td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+    <?php else : ?>
+        <h3><?php echo $this->__("No update files are available in media/dpd/postcode_updates"); ?></h3>
+    <?php endif; ?>
+</div>

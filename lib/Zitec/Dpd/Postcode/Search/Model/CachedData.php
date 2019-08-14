@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zitec_Dpd – shipping carrier extension - postcode validation
  *
@@ -14,7 +15,6 @@
  * @copyright  Copyright (c) 2014 Zitec COM
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 class Zitec_Dpd_Postcode_Search_Model_CachedData
 {
 
@@ -35,7 +35,8 @@ class Zitec_Dpd_Postcode_Search_Model_CachedData
         return self::$_regions;
     }
 
-    public static function getHouseNumberIdentifier(){
+    public static function getHouseNumberIdentifier()
+    {
         return self::$_housenumberIdentifier;
     }
 

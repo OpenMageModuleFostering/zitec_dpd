@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zitec_Dpd – shipping carrier extension - postcode validation
  *
@@ -14,7 +15,6 @@
  * @copyright  Copyright (c) 2014 Zitec COM
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 abstract class Zitec_Dpd_Postcode_Search_Abstract
 {
 
@@ -26,6 +26,8 @@ abstract class Zitec_Dpd_Postcode_Search_Abstract
     const ADDRESS_FIELD_REGION = 'region';
     const ADDRESS_FIELD_ADDRESS = 'address';
     const ADDRESS_FIELD_POSTCODE = 'postcode';
+
+    const STRICT_SEARCH_LIMIT = 400;
 
     const SEARCH_APPLY_SIMILARITY_MAX_THRESHOLD = 100;
     const SEARCH_CAN_RETURN_RANDOM_VALUES = 1;
@@ -42,6 +44,7 @@ abstract class Zitec_Dpd_Postcode_Search_Abstract
     const SEARCH_HOUSE_NUMBER_CONSTANT1 = 2;
     //is used to increase the results mapping house numbers
     const SEARCH_HOUSE_NUMBER_CONSTANT2 = 5;
+    const ADDRESS_FIELD_LENGTH_LIMIT = 70;
 
 
     protected $_searchModel;
@@ -51,20 +54,19 @@ abstract class Zitec_Dpd_Postcode_Search_Abstract
     protected static $base_path;
 
 
-
-
-
     /**
      * filter input address by search model function
+     *
      * @param $array
      */
     protected function  filterAddressInput($array)
     {
-        if(is_array($array)){
-            foreach($array as $key => &$value){
+        if (is_array($array)) {
+            foreach ($array as $key => &$value) {
                 $value = $this->applyInputFilter($key, $value);
             }
         }
+
         return $array;
     }
 
@@ -72,18 +74,15 @@ abstract class Zitec_Dpd_Postcode_Search_Abstract
      * you can customize here how input filters will be applied
      *
      * default is applied the search model filter
+     *
      * @param $key
      * @param $value
      */
-    public function applyInputFilter($key, $value){
+    public function applyInputFilter($key, $value)
+    {
 
-        return  $this->_searchModel->applyFiltersForAddress( $value );
+        return $this->_searchModel->applyFiltersForAddress($value);
     }
-
-
-
-
-
 
 
     /**
@@ -109,7 +108,8 @@ abstract class Zitec_Dpd_Postcode_Search_Abstract
     }
 
 
-    public function getModel(){
+    public function getModel()
+    {
         return $this->_searchModel;
     }
 
@@ -120,6 +120,9 @@ abstract class Zitec_Dpd_Postcode_Search_Abstract
      */
     public static function autoload($class)
     {
+        if (strpos($class, 'Zitec') === false && strpos($class, 'zitec') === false) {
+            return false;
+        }
         $baseDir                              = dirname(dirname(dirname(dirname(dirname(__FILE__)))));
         Zitec_Dpd_Postcode_Search::$base_path = $baseDir;
         $classFile                            = $baseDir . DIRECTORY_SEPARATOR . str_replace(' ', DIRECTORY_SEPARATOR, ucwords(str_replace('_', ' ', $class)));
@@ -130,10 +133,11 @@ abstract class Zitec_Dpd_Postcode_Search_Abstract
 
     public static function getBasePath()
     {
-        if(empty(self::$base_path)){
+        if (empty(self::$base_path)) {
             $baseDir                              = dirname(dirname(dirname(dirname(dirname(__FILE__)))));
             Zitec_Dpd_Postcode_Search::$base_path = $baseDir;
         }
+
         return self::$base_path;
     }
 

@@ -73,6 +73,17 @@ class Zitec_Dpd_Postcode_Search extends Zitec_Dpd_Postcode_Search_Abstract imple
     /**
      * @return boolean
      */
+    public function uninstallPostcodeDatabase()
+    {
+        $this->_searchModel->uninstall();
+
+        return true;
+    }
+
+
+    /**
+     * @return boolean
+     */
     public function updatePostcodeDatabase()
     {
         return true;
@@ -97,14 +108,22 @@ class Zitec_Dpd_Postcode_Search extends Zitec_Dpd_Postcode_Search_Abstract imple
     {
         $address = $this->filterAddressInput($address);
 
-        $postcode = $this->_searchModel->search($address,$relevance);
-        if (!empty($postcode)){
+        $postcode = $this->_searchModel->search($address, $relevance);
+        if (!empty($postcode)) {
             return $postcode;
         }
+
         return null;
     }
 
+    public function updateDatabase($file){
+        if (!file_exists($file)){
+            return false;
+        }
 
+        return $this->_searchModel->updateDatabase($file);
+
+    }
 
     /**
      * @param array $address
@@ -120,10 +139,12 @@ class Zitec_Dpd_Postcode_Search extends Zitec_Dpd_Postcode_Search_Abstract imple
      *
      * @return string - postcode or null
      */
-    public function searchSimilarAddresses(array $address){
+    public function searchSimilarAddresses(array $address)
+    {
         $address = $this->filterAddressInput($address);
 
         $address = $this->_searchModel->searchSimilarAddresses($address);
+
         return $address;
     }
 
@@ -133,6 +154,17 @@ class Zitec_Dpd_Postcode_Search extends Zitec_Dpd_Postcode_Search_Abstract imple
         return $this->_searchModel->getAddressByPostcode($postcode);
     }
 
+
+    public function processCitySimilarity($city)
+    {
+        return $this->_searchModel->processCitySimilarity($city);
+    }
+
+
+    public function identifyRegionByCity($city)
+    {
+        return $this->_searchModel->identifyRegionByCity($city);
+    }
 
     /**
      * @param string $postcode
@@ -148,10 +180,11 @@ class Zitec_Dpd_Postcode_Search extends Zitec_Dpd_Postcode_Search_Abstract imple
 
     public function isEnabled($country)
     {
-        $country = $this->applyInputFilter(0,$country);
-        if($country=='romania'){
+        $country = $this->applyInputFilter(0, $country);
+        if ($country == 'romania') {
             return true;
         }
+
         return false;
     }
 

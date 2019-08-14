@@ -25,6 +25,7 @@
 class Zitec_Dpd_Helper_Postcode_Search extends Mage_Core_Helper_Abstract
 {
 
+
     public function extractPostCodeForShippingRequest($request)
     {
         $countryName = Mage::getModel('directory/country')->loadByCode($request->getDestCountryId())->getName();
@@ -177,6 +178,35 @@ class Zitec_Dpd_Helper_Postcode_Search extends Mage_Core_Helper_Abstract
 
         return $getSearchPostcodeModel;
     }
+
+
+    /**
+     * return the path do database files CSV
+     *
+     * @return string
+     */
+    public function getPathToDatabaseUpgradeFiles(){
+        return  Mage::getBaseDir('media').DS.'dpd'.DS . 'postcode_updates'. DS;
+    }
+
+
+    /**
+     *
+     * call the library function for postcode update
+     *
+     * @param $fileName
+     *
+     * @return bool
+     * @throws Exception
+     */
+    public function updateDatabase($fileName){
+        $result = $this->getSearchPostcodeModel()->updateDatabase($fileName);
+        if(empty($result)){
+            throw new Exception(Mage::helper('core')->__('An error occurred while updating postcode database. Please run again the import script. (A database backup is always created in zitec_dpd_postcodes_backup table.)'));
+        }
+        return true;
+    }
+
 
 
 }

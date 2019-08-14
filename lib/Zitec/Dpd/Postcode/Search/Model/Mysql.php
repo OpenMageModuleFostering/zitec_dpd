@@ -53,7 +53,8 @@ class Zitec_Dpd_Postcode_Search_Model_Mysql extends Zitec_Dpd_Postcode_Search_Mo
         }
 
         if (empty($address[Zitec_Dpd_Postcode_Search::ADDRESS_FIELD_REGION])) {
-            return false;
+            //this is disabled because some platforms may not collect region field
+            //return false;
         }
 
         $changesMade = $this->processRegionAndCity($address);
@@ -85,6 +86,31 @@ class Zitec_Dpd_Postcode_Search_Model_Mysql extends Zitec_Dpd_Postcode_Search_Mo
 
 
         return $results;
+    }
+
+    /**
+     *
+     * @param $city
+     *
+     * @return array|bool
+     */
+    public function identifyRegionByCity($city)
+    {
+        //try locate the city addresses
+        $sql = 'SELECT DISTINCT `region` FROM `' . self::TABLE_NAME . '` WHERE `city` = %s ';
+        $sql = sprintf($sql,
+            $this->quote($city)
+        );
+
+        $results = array();
+        foreach ($this->query($sql) as $row) {
+            $results[] = $row['region'];
+        }
+        if (count($results) > 0) {
+            return $results;
+        }
+
+        return false;
     }
 
 
@@ -545,7 +571,7 @@ class Zitec_Dpd_Postcode_Search_Model_Mysql extends Zitec_Dpd_Postcode_Search_Mo
      *
      * @return mixed
      */
-    private function processCitySimilarity($cityInput)
+    public function processCitySimilarity($cityInput)
     {
         //use cached database
         $cities = Zitec_Dpd_Postcode_Search_Model_CachedData::getCities();
@@ -599,7 +625,7 @@ class Zitec_Dpd_Postcode_Search_Model_Mysql extends Zitec_Dpd_Postcode_Search_Mo
      *
      * @return mixed
      */
-    private function processRegionSimilarity($regionInput)
+    public function processRegionSimilarity($regionInput)
     {
         //use cached database
         $regions = Zitec_Dpd_Postcode_Search_Model_CachedData::getRegions();
@@ -657,7 +683,6 @@ class Zitec_Dpd_Postcode_Search_Model_Mysql extends Zitec_Dpd_Postcode_Search_Mo
         $street = $address[Zitec_Dpd_Postcode_Search::ADDRESS_FIELD_ADDRESS];
         $words  = explode(' ', $street);
 
-
         $sql      = 'SELECT ' . ($count === true ? ' COUNT(*) AS count ' : ' * ') . ' FROM `' . self::TABLE_NAME . '` WHERE `region` LIKE %s AND `city` LIKE %s ';
         $sql      = sprintf($sql,
             $this->quote($address[Zitec_Dpd_Postcode_Search::ADDRESS_FIELD_REGION] . "%"),
@@ -686,6 +711,7 @@ class Zitec_Dpd_Postcode_Search_Model_Mysql extends Zitec_Dpd_Postcode_Search_Mo
             $sql .= ' ) ';
         }
 
+        $sql     = $sql . ' LIMIT ' . Zitec_Dpd_Postcode_Search::STRICT_SEARCH_LIMIT;
         $results = array();
         foreach ($this->query($sql) as $row) {
             $results[] = $row;
@@ -710,7 +736,165 @@ class Zitec_Dpd_Postcode_Search_Model_Mysql extends Zitec_Dpd_Postcode_Search_Mo
      */
     public function query($sql, $bind = array())
     {
-        return $this->getConnection()->query($sql);
+    	return $this->getConnection()->query($sql);
+    }
+
+
+    /**
+     * update postcode database using a CSV file
+     *  - store all entry from csv file in a temporary table
+     *  - create a backup of the main table - postcode
+     *  - sync temporary table with main postcode table
+     *  - if errors occur return to the back-up table
+     * @param $file
+     */
+    public function updateDatabase($file)
+    {
+        if (!file_exists($file)) {
+            return false;
+        }
+
+        $pathInfo = pathinfo($file);
+        if ($pathInfo['extension'] != 'csv') {
+            return false;
+        }
+
+        $mappedColumns = array();
+        $columns       = array();
+        $rows          = array();
+        if (($handle = fopen($file, "r")) !== false) {
+            $row = 0;
+            while (($data = fgetcsv($handle, 1000, ",")) !== false) {
+                $data = $this->applyFiltersForAddress($data);
+                $num  = count($data);
+                if ($row == 0) {
+                    for ($c = 0; $c < $num; $c++) {
+                        $columns[$c] = $data[$c];
+                    }
+                    $mappedColumns = $this->mapTheColumns($columns);
+                    $row++;
+                    continue;
+                }
+                $tempRow = array();
+                for ($c = 0; $c < $num; $c++) {
+                    if (!isset($mappedColumns[$c])) {
+                        continue;
+                    }
+
+                    if ($mappedColumns[$c] == 'saturday') {
+                        $tempRow[$mappedColumns[$c]] = ($data[$c] == 'da' ? 1 : 0);
+                        continue;
+                    }
+                    $tempRow[$mappedColumns[$c]] = $data[$c];
+                }
+                $rows[] = $tempRow;
+
+                $row++;
+            }
+            fclose($handle);
+        }
+
+
+        $chunks = array_chunk($rows, 500);
+
+        $table = self::TABLE_NAME . '_temp';
+        $this->dropTableIfExist($table);
+        $this->createTemporaryTable($table);
+        $toBeInsertedRowsCount = 0;
+        foreach ($chunks as $chunk) {
+            $toBeInsertedRowsCount += count($chunk);
+            try {
+                $this->insertMultiple($table, $chunk);
+            } catch (Exception $e) {
+                //for some reasons we have to skip this chunk
+            }
+        }
+
+        $tempTableRows = $this->countTemporaryTableRows($table);
+        if ($tempTableRows / $toBeInsertedRowsCount > 0.9) {
+            try {
+                $this->createADatabaseBackup();
+                $this->switchTemporaryTable($table);
+            }catch (Exception $e){
+                $this->restoreDatabaseBackup();
+                throw new Exception('Database synchronization problem. Please run the import again.');
+            }
+        }
+
+        return true;
+    }
+
+
+    protected function countTemporaryTableRows($table)
+    {
+
+        $result = $this->query('
+                    SELECT COUNT(*) AS count FROM `' . $table . '`;
+            ');
+        $r = array();
+        foreach($result as $result){
+            $r[] = $result;
+        }
+        if(isset($r[0],$r[0]['count'])){
+            return $r[0]['count'];
+        }
+        return false;
+    }
+
+
+    /**
+     * save all stored data into the main table of postcode module
+     * @param $table
+     *
+     * @return int
+     *
+     */
+    protected function switchTemporaryTable($table)
+    {
+        $this->query('
+                    TRUNCATE TABLE `' . self::TABLE_NAME . '`;
+        ');
+        $this->query('
+                    ALTER TABLE  `' . self::TABLE_NAME . '`
+                    CHANGE COLUMN `city` `city` VARCHAR(50) NOT NULL ;
+        ');
+        $this->query('
+                    INSERT INTO `' . self::TABLE_NAME . '` SELECT * FROM `'.$table.'`;
+        ');
+        $this->query('
+                    TRUNCATE TABLE `' . $table . '`;
+        ');
+
+        return 1;
+    }
+
+    /**
+     * @param $columns
+     *
+     * @return array
+     */
+    protected function mapTheColumns($columns)
+    {
+        $mappingRule = array(
+            'cod postal'      => 'postcode',
+            'judet'           => 'region',
+            'localitate'      => 'city',
+            'tip artera'      => 'road_type',
+            'denumire'        => 'address',
+            'zona de livrare' => 'zone',
+            'livrare sambata' => 'saturday',
+        );
+
+        $mappedColumns = array();
+        foreach ($columns as $key => $column) {
+            if (!isset($mappingRule[$column])) {
+                continue;
+            }
+            $mappedColumns[$key] = $mappingRule[$column];
+        }
+
+        return $mappedColumns;
+
     }
 
     /**
@@ -751,6 +935,113 @@ class Zitec_Dpd_Postcode_Search_Model_Mysql extends Zitec_Dpd_Postcode_Search_Mo
 
 
     /**
+     * insert an chunk of data in one statement
+     * 
+     * @param       $table
+     * @param array $chunk
+     *
+     * @return array
+     */
+    public function insertMultiple($table, array $chunk)
+    {
+        if (count($chunk) == 0) {
+            return false;
+        }
+        $firstItem = array_pop($chunk);
+        $keys      = array_keys($firstItem);
+        $sql       = "INSERT INTO " . $this->_quoteIdentifier($table, true) . "
+            (`" . implode('`,`', $keys) . "`) VALUES
+            ('" . implode('\',\'', $firstItem) . "')";
+
+        foreach ($chunk as $item) {
+            $sql .= "
+            , ('" . implode('\',\'', $item) . "')";
+        }
+
+        try {
+            $result = $this->query($sql);
+        } catch (Exception $e) {
+            echo $e->getMessage() . '\n';
+        }
+
+        return $result;
+
+    }
+
+    /**
+     * store a database backup of the last stable version  of the table
+     *
+     * @return bool
+     */
+    protected function createADatabaseBackup(){
+        $this->dropTableIfExist(self::TABLE_NAME.'_backup');
+        $this->createTemporaryTable(self::TABLE_NAME.'_backup');
+        $this->query('
+                    INSERT INTO `' .self::TABLE_NAME.'_backup'. '` SELECT * FROM `'.self::TABLE_NAME.'`;
+        ');
+
+        return true;
+    }
+
+
+    /**
+     * in case of emergency problems we have to restore last
+     * stable version of the postcode database
+     *
+*@return bool
+     */
+    protected function restoreDatabaseBackup(){
+        $this->query('
+                    TRUNCATE TABLE `' . self::TABLE_NAME . '`;
+        ');
+
+        $this->query('
+                    INSERT INTO `' .self::TABLE_NAME. '` SELECT * FROM `'.self::TABLE_NAME.'_backup'.'`;
+        ');
+        return true;
+    }
+
+    protected function createTemporaryTable($table)
+    {
+        $this->query('
+                    CREATE TABLE IF NOT EXISTS `' . $table . '` (
+                      `id` int(10) unsigned NULL,
+                      `postcode` varchar(10) NOT NULL,
+                      `region` varchar(50) NULL,
+                      `city` varchar(50) NOT NULL,
+                      `road_type` varchar(15) NULL,
+                      `address` varchar(100) NULL,
+                      `d_depo` int(5) NULL,
+                      `d_sort` varchar(5) NULL,
+                      `zone` varchar(5) NULL,
+                      `saturday` tinyint(1) NULL,
+                      `route` varchar(5) NULL
+                    ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+            ');
+        $this->query('
+                    ALTER TABLE `' . $table . '`
+                     ADD PRIMARY KEY (`id`), ADD KEY `postcode` (`postcode`), ADD KEY `city` (`city`), ADD KEY `region` (`region`), ADD KEY `region_2` (`region`,`city`), ADD KEY `address` (`address`), ADD KEY `region_3` (`region`,`city`,`address`);
+            ');
+        $this->query('
+                   ALTER TABLE `' . $table . '`
+                    MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;
+            ');
+
+        return true;
+    }
+
+    public function dropTableIfExist($table)
+    {
+        try {
+            $this->query('DROP TABLE `' . $table . '`');
+        } catch (Exception $e) {
+            //the table may not exist
+        }
+
+        return true;
+    }
+
+    /**
      *
      */
     public function install()
@@ -766,10 +1057,10 @@ class Zitec_Dpd_Postcode_Search_Model_Mysql extends Zitec_Dpd_Postcode_Search_Mo
         try {
             $this->query('
                     CREATE TABLE IF NOT EXISTS `' . self::TABLE_NAME . '` (
-                      `id` int(10) unsigned NOT NULL,
+                      `id` int(10) unsigned NULL,
                       `postcode` varchar(10) NOT NULL,
                       `region` varchar(50) NULL,
-                      `city` varchar(20) NOT NULL,
+                      `city` varchar(50) NOT NULL,
                       `road_type` varchar(15) NULL,
                       `address` varchar(100) NULL,
                       `d_depo` int(5) NULL,
@@ -778,17 +1069,17 @@ class Zitec_Dpd_Postcode_Search_Model_Mysql extends Zitec_Dpd_Postcode_Search_Mo
                       `saturday` tinyint(1) NULL,
                       `route` varchar(5) NULL
                     ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
-
+            ');
+            $this->query('
                     ALTER TABLE `' . self::TABLE_NAME . '`
                      ADD PRIMARY KEY (`id`), ADD KEY `postcode` (`postcode`), ADD KEY `city` (`city`), ADD KEY `region` (`region`), ADD KEY `region_2` (`region`,`city`), ADD KEY `address` (`address`), ADD KEY `region_3` (`region`,`city`,`address`);
-
+            ');
+            $this->query('
                    ALTER TABLE `' . self::TABLE_NAME . '`
                     MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;
-
-
-        ');
+            ');
         } catch (Exception $e) {
-            //database exists nothing to do
+            //table exists, we have to empty the table
             $this->query('
                 TRUNCATE `' . self::TABLE_NAME . '`;
             ');
@@ -810,6 +1101,16 @@ class Zitec_Dpd_Postcode_Search_Model_Mysql extends Zitec_Dpd_Postcode_Search_Mo
 
     }
 
+    public function uninstall()
+    {
+        try {
+            $this->query('DROP TABLE `' . self::TABLE_NAME . '`');
+        } catch (Exception $e) {
+            //the table may not exist
+        }
+
+        return true;
+    }
 
     /**
      * return install script for zitec_dpd_postcodes

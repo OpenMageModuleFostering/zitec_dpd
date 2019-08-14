@@ -26,6 +26,11 @@
                     <sort_order>14</sort_order>
                     <action>adminhtml/system_config/edit/section/payment</action>
                 </zitec_dpd_payment_settings>
+                <postcode_updater>
+                    <title>Postcode update manager</title>
+                    <sort_order>16</sort_order>
+                    <action>zitec_dpd/adminhtml_postcode/updateForm</action>
+                </postcode_updater>
                 <reports>
                     <title>Report price vs cost</title>
                     <sort_order>40</sort_order>

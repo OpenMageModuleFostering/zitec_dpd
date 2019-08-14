@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zitec_Dpd – shipping carrier extension - postcode validation
  *
@@ -14,7 +15,6 @@
  * @copyright  Copyright (c) 2014 Zitec COM
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 abstract class Zitec_Dpd_Postcode_Search_Model
 {
 
@@ -36,8 +36,9 @@ abstract class Zitec_Dpd_Postcode_Search_Model
      *
      * @return mixed
      */
-    public function quote($string){
-       return $this->getConnection()->quote($string);
+    public function quote($string)
+    {
+        return $this->getConnection()->quote($string);
     }
 
     /**
@@ -93,19 +94,24 @@ abstract class Zitec_Dpd_Postcode_Search_Model
 
     protected function applyTextFilter($string)
     {
-        $search = array('Ă', 'ă', 'Â', 'â', 'Î', 'î', 'Ş', 'ş', 'Ţ', 'ţ',	'Ş', 'ş', 'Ţ', 'ţ',"\s", "\t","\r\n");
+        $search  = array('Ă', 'ă', 'Â', 'â', 'Î', 'î', 'Ş', 'ş', 'Ţ', 'ţ', 'Ş', 'ş', 'Ţ', 'ţ', "\s", "\t", "\r\n");
         $replace = array('A', 'a', 'A', 'a', 'I', 'i', 'S', 's', 'T', 't', 'S', 's', 'T', 't', " ", ' ', ' ');
-        $string = str_replace($search, $replace, $string);
+        $string  = str_replace($search, $replace, $string);
 
-        $temp = @iconv("utf-8", "ascii//TRANSLIT", $string);
-        if(!empty($temp)){
+        // iconv is returning an notice sometimes unexpected
+        ob_start();
+        $temp = @iconv("UTF-8", "ISO-8859-1//TRANSLIT", $string);
+        $out1 = ob_get_contents();
+        ob_end_clean();
+
+        if (!empty($temp)) {
             $string = $temp;
         }
-        $string =  filter_var($string, FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
+        $string = filter_var($string, FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
         $string = preg_replace("/[^a-zA-Z0-9.\\\ \/-]+/", "", $string);
+
         return strtolower(trim($string));
     }
-
 
 
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zitec_Dpd – shipping carrier extension - postcode validation
  *
@@ -14,9 +15,8 @@
  * @copyright  Copyright (c) 2014 Zitec COM
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-interface Zitec_Dpd_Postcode_Search_Model_Interface {
-
+interface Zitec_Dpd_Postcode_Search_Model_Interface
+{
 
 
     /**
@@ -32,27 +32,27 @@ interface Zitec_Dpd_Postcode_Search_Model_Interface {
     public function search($address);
 
 
-
     /**
      * Fetches all SQL result rows as a sequential array.
      * Uses the current fetchMode for the adapter.
      *
-     * @param string|Zend_Db_Select $sql  An SQL SELECT statement.
-     * @param mixed                 $bind Data to bind into SELECT placeholders.
+     * @param string|Zend_Db_Select $sql       An SQL SELECT statement.
+     * @param mixed                 $bind      Data to bind into SELECT placeholders.
      * @param mixed                 $fetchMode Override current fetch mode.
+     *
      * @return array
      */
     public function query($sql, $bind = array());
-
 
 
     /**
      * Inserts a table row with specified data.
      *
      * @param array $bind Column-value pairs.
+     *
      * @return int The number of affected rows.
      */
-    public function insert($table,array $bind);
+    public function insert($table, array $bind);
 
 
     function applyFiltersForAddress(&$data);
