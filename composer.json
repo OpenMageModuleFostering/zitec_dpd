@@ -1,16 +1,19 @@
 {
-    "name": "OpenMageModuleFostering/zitec_dpd",
+    "name": "OpenMageModuleFostering\/zitec_dpd",
     "type": "magento-module",
     "license": "Open-Software-License-(OSL-3.0)",
     "homepage": "",
     "description": "Shipping carrier",
     "authors": [
-    {
-        "name": "Zitec",
-        "email": "magento@zitec.ro"
-    }
-],
+        {
+            "name": "Zitec",
+            "email": "magento@zitec.ro"
+        }
+    ],
     "suggest": {
-        "magento-hackathon/magento-composer-installer": "*"
-    }
+        "magento-hackathon\/magento-composer-installer": "*"
+    },
+    "keywords": [
+        "openmage-module"
+    ]
 }
